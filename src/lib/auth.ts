@@ -6,7 +6,13 @@ import {
 import { ref, set } from 'firebase/database';
 import { auth, database } from './firebase';
 
-export const registerUser = async (email: string, password: string) => {
+export const registerUser = async (
+  email: string,
+  password: string,
+  firstName: string,
+  lastName: string,
+  mobileNumber: string
+) => {
   try {
     const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
@@ -14,6 +20,9 @@ export const registerUser = async (email: string, password: string) => {
     // Store additional user data in Realtime Database
     await set(ref(database, 'users/' + user.uid), {
       email: user.email,
+      firstName,
+      lastName,
+      mobileNumber,
       createdAt: new Date().toISOString(),
       lastLogin: new Date().toISOString()
     });
